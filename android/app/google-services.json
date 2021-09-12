@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "569937707698",
+    "project_id": "bycoderstec-desafio-mobile",
+    "storage_bucket": "bycoderstec-desafio-mobile.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:569937707698:android:e03c4c091dd8ead4d97fab",
+        "android_client_info": {
+          "package_name": "danilomos.aondeestou"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "569937707698-3olkka2pnhaqm2alpil53dn80d6prca0.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCl-QR8iJ7tOiQgxHd8GEqXFb8iPHNTBHA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "569937707698-3olkka2pnhaqm2alpil53dn80d6prca0.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

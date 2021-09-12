@@ -1,6 +1,8 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { Geolocation } from '@ionic-native/geolocation/ngx';
+import { Geolocation, Geoposition } from '@ionic-native/geolocation/ngx';
 import { Platform } from '@ionic/angular';
+import { AnalyticsService } from 'src/app/services/analytics/analytics.service';
+import { AuthService } from 'src/app/services/auth/auth.service';
 import { UtilService } from 'src/app/services/util/util.service';
 
 declare var google: any;
@@ -25,12 +27,17 @@ export class HomePage implements OnInit {
   constructor(
     private platform: Platform,
     private geolocation: Geolocation,
-    private utilService: UtilService
+    private utilService: UtilService,
+    private analyticsService: AnalyticsService,
+    private authService: AuthService
   ) { }
 
   async ngOnInit() {
     await this.platform.ready();
-    this.loadMap();
+    await this.loadMap();
+    const user: any = await this.authService.getUser();
+    const coords = await this.getLocation();
+    await this.analyticsService.logEvent("home", { user: user.uid, email: user.email, coords: this.formatCoords(coords) })
   }
 
   async loadMap() {
@@ -46,6 +53,7 @@ export class HomePage implements OnInit {
       this.watchGeolocation();
     } catch (err) {
       console.log(err);
+      await this.analyticsService.errorEvent(err);
     }
   }
 
@@ -63,6 +71,16 @@ export class HomePage implements OnInit {
     });
   }
 
+  async getLocation() {
+    try {
+      const position = await this.geolocation.getCurrentPosition();
+      return position.coords;
+    } catch (err) {
+      console.log(err);
+      return err;
+    }
+  }
+
   addMarkerToMap(marker) {
     if (marker.latitude === this.actualMarker.latitude && marker.longitude === this.actualMarker.longitude) return;
     this.actualMarker = marker;
@@ -77,6 +95,13 @@ export class HomePage implements OnInit {
 
     this.mapMarker.setMap(this.map);
     this.map.setCenter(position);
+  }
+
+  formatCoords(coords: Geoposition["coords"]) {
+    if (coords.latitude) {
+      return JSON.stringify({ latitude: coords.latitude, longitude: coords.latitude, accuracy: coords.accuracy });
+    }
+    return JSON.stringify(coords);
   }
 
 }

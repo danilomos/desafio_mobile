@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { AnalyticsService } from 'src/app/services/analytics/analytics.service';
 import { AuthService } from 'src/app/services/auth/auth.service';
 import { UtilService } from 'src/app/services/util/util.service';
 
@@ -28,7 +29,8 @@ export class LoginPage implements OnInit {
     public formBuilder: FormBuilder,
     private router: Router,
     private authService: AuthService,
-    private utilService: UtilService
+    private utilService: UtilService,
+    private analyticsService: AnalyticsService
   ) {
     this.loginForm = this.formBuilder.group({
       email: ['', [Validators.required, Validators.pattern(emailPattern)]],
@@ -41,11 +43,16 @@ export class LoginPage implements OnInit {
   async submitForm() {
     try {
       const { value } = this.loginForm;
-      await this.authService.signOut();
-      await this.authService.signinUser(value);
-      this.router.navigateByUrl("/home");
+      await this.utilService.showLoading();
+      const user: any = await this.authService.signIn(value);
+      await this.analyticsService.logEvent("login", { user: user.uid, email: user.email, loginAt: user.lastLoginAt })
+      await this.router.navigateByUrl("/home");
     } catch (err) {
+      console.log(err);
+      await this.analyticsService.errorEvent(err);
       this.utilService.showToast("Dados errados ou usuário inexistente.");
+    } finally {
+      this.utilService.hideLoading();
     }
   }
 

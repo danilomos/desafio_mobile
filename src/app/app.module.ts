@@ -7,10 +7,13 @@ import { IonicModule, IonicRouteStrategy } from '@ionic/angular';
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 import { Geolocation } from '@ionic-native/geolocation/ngx';
+import { FirebaseAnalytics } from '@ionic-native/firebase-analytics/ngx';
 
 import { AngularFireModule } from '@angular/fire/compat';
 import { AngularFireAuthModule } from '@angular/fire/compat/auth';
 import { AngularFireDatabaseModule } from '@angular/fire/compat/database';
+import { AngularFireAnalyticsModule } from '@angular/fire/compat/analytics';
+
 import { environment } from "../environments/environment";
 
 @NgModule({
@@ -22,14 +25,16 @@ import { environment } from "../environments/environment";
     AppRoutingModule,
     AngularFireModule.initializeApp(environment.firebaseConfig),
     AngularFireAuthModule,
-    AngularFireDatabaseModule
+    AngularFireDatabaseModule,
+    AngularFireAnalyticsModule
   ],
   providers: [
     {
       provide: RouteReuseStrategy,
       useClass: IonicRouteStrategy
     },
-    Geolocation
+    Geolocation,
+    FirebaseAnalytics
   ],
   bootstrap: [AppComponent],
 })

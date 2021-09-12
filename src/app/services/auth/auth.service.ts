@@ -35,4 +35,13 @@ export class AuthService {
     }
   }
 
+  async getUser() {
+    try {
+      const user = await this.fireAuth.currentUser;
+      return user.toJSON();
+    } catch (err) {
+      throw err;
+    }
+  }
+
 }

@@ -34,7 +34,8 @@ export class StoreService {
 
   async _createUser(user) {
     try {
-      return await this.firestore.collection('users').doc(user.uid).set(user);
+      const userToCreate = JSON.parse(JSON.stringify(user, (key, value) => (value === undefined ? "" : value)))
+      return await this.firestore.collection('users').doc(user.uid).set(userToCreate);
     } catch (err) {
       throw err;
     }
