@@ -13,6 +13,7 @@ import { AngularFireModule } from '@angular/fire/compat';
 import { AngularFireAuthModule } from '@angular/fire/compat/auth';
 import { AngularFireDatabaseModule } from '@angular/fire/compat/database';
 import { AngularFireAnalyticsModule } from '@angular/fire/compat/analytics';
+import { SQLite } from '@ionic-native/sqlite/ngx';
 
 import { environment } from "../environments/environment";
 
@@ -34,7 +35,8 @@ import { environment } from "../environments/environment";
       useClass: IonicRouteStrategy
     },
     Geolocation,
-    FirebaseAnalytics
+    FirebaseAnalytics,
+    SQLite
   ],
   bootstrap: [AppComponent],
 })

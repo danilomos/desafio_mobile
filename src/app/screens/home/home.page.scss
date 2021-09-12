@@ -3,6 +3,10 @@
 }
 
 ion-header {
+  ion-title {
+    margin-right: 50px;
+  }
+
   ion-toolbar {
     --background: #111111;
     --ion-color-base: transparent !important;

@@ -3,10 +3,10 @@ import { Geolocation, Geoposition } from '@ionic-native/geolocation/ngx';
 import { Platform } from '@ionic/angular';
 import { AnalyticsService } from 'src/app/services/analytics/analytics.service';
 import { AuthService } from 'src/app/services/auth/auth.service';
+import { DatabaseService } from 'src/app/services/database/database.service';
 import { UtilService } from 'src/app/services/util/util.service';
 
 declare var google: any;
-
 
 @Component({
   selector: 'app-home',
@@ -23,21 +23,23 @@ export class HomePage implements OnInit {
     longitude: -46.6388
   };
   actualMarker: any = {};
+  user: any = {};
 
   constructor(
     private platform: Platform,
     private geolocation: Geolocation,
     private utilService: UtilService,
     private analyticsService: AnalyticsService,
-    private authService: AuthService
+    private authService: AuthService,
+    private databaseService: DatabaseService
   ) { }
 
   async ngOnInit() {
     await this.platform.ready();
     await this.loadMap();
-    const user: any = await this.authService.getUser();
+    this.user = await this.authService.getUser();
     const coords = await this.getLocation();
-    await this.analyticsService.logEvent("home", { user: user.uid, email: user.email, coords: this.formatCoords(coords) })
+    await this.analyticsService.logEvent("home", { user: this.user.uid, email: this.user.email, coords: this.formatCoords(coords) })
   }
 
   async loadMap() {
@@ -52,14 +54,12 @@ export class HomePage implements OnInit {
 
       this.watchGeolocation();
     } catch (err) {
-      console.log(err);
       await this.analyticsService.errorEvent(err);
     }
   }
 
   watchGeolocation() {
     this.geolocation.watchPosition().subscribe((data: any) => {
-      console.log(data);
       switch (data.code) {
         case 1:
           this.utilService.showToast(data.message);
@@ -76,7 +76,6 @@ export class HomePage implements OnInit {
       const position = await this.geolocation.getCurrentPosition();
       return position.coords;
     } catch (err) {
-      console.log(err);
       return err;
     }
   }
@@ -95,6 +94,8 @@ export class HomePage implements OnInit {
 
     this.mapMarker.setMap(this.map);
     this.map.setCenter(position);
+
+    this.databaseService.addUserPosition({ ...this.user, ...marker });
   }
 
   formatCoords(coords: Geoposition["coords"]) {
@@ -102,6 +103,10 @@ export class HomePage implements OnInit {
       return JSON.stringify({ latitude: coords.latitude, longitude: coords.latitude, accuracy: coords.accuracy });
     }
     return JSON.stringify(coords);
+  }
+
+  goToLogin() {
+    this.authService.signOut();
   }
 
 }

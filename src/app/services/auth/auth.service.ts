@@ -27,9 +27,7 @@ export class AuthService {
 
   async signOut() {
     try {
-      const res = await this.fireAuth.signOut();
-      localStorage.removeItem('user');
-      return res;
+      await this.fireAuth.signOut();
     } catch (err) {
       throw err;
     }
