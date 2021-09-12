@@ -1,5 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
+import { AuthService } from 'src/app/services/auth/auth.service';
+import { UtilService } from 'src/app/services/util/util.service';
 
 const emailPattern = /^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,3})$/;
 const validationsMessages = {
@@ -22,7 +25,10 @@ export class LoginPage implements OnInit {
   validationsMessages = validationsMessages;
 
   constructor(
-    public formBuilder: FormBuilder
+    public formBuilder: FormBuilder,
+    private router: Router,
+    private authService: AuthService,
+    private utilService: UtilService
   ) {
     this.loginForm = this.formBuilder.group({
       email: ['', [Validators.required, Validators.pattern(emailPattern)]],
@@ -32,13 +38,20 @@ export class LoginPage implements OnInit {
 
   ngOnInit() { }
 
-  submitForm() {
-    console.log(this.loginForm.value);
+  async submitForm() {
+    try {
+      const { value } = this.loginForm;
+      await this.authService.signOut();
+      await this.authService.signinUser(value);
+      this.router.navigateByUrl("/home");
+    } catch (err) {
+      this.utilService.showToast("Dados errados ou usuário inexistente.");
+    }
   }
 
-  showError(field) {
-    return this.loginForm.get(field).hasError(this.validationsMessages[field])
-      && (this.loginForm.get(field).dirty || this.loginForm.get(field).touched);
+  showError(fieldName, type) {
+    const field = this.loginForm.get(fieldName);
+    return field.hasError(type) && (field.dirty || field.touched);
   }
 
 }

@@ -1,0 +1,17 @@
+#map {
+  height: 100%;
+}
+
+ion-header {
+  ion-toolbar {
+    --background: #111111;
+    --ion-color-base: transparent !important;
+    height: 50px;
+
+    ion-title {
+      --color: #ffffff;
+      font-size: 16px;
+      text-align: center;
+    }
+  }
+}

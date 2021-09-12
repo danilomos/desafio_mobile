@@ -1,6 +1,9 @@
 {
   "root": true,
   "ignorePatterns": ["projects/**/*"],
+  "rules": {
+    "quotes": ["double"]
+  },
   "overrides": [
     {
       "files": ["*.ts"],

@@ -7,7 +7,7 @@
 
     <div class="validation-errors">
       <ion-label *ngFor="let validation of validationsMessages.email">
-        <span *ngIf="showError('email')">{{ validation.message }}</span>
+        <span *ngIf="showError('email', validation.type)">{{ validation.message }}</span>
       </ion-label>
     </div>
 
@@ -18,11 +18,13 @@
 
     <div class="validation-errors">
       <ion-label *ngFor="let validation of validationsMessages.password">
-        <span *ngIf="showError('password')">{{ validation.message }}</span>
+        <span *ngIf="showError('password', validation.type)">{{ validation.message }}</span>
       </ion-label>
     </div>
   </form>
 </ion-content>
 <ion-footer>
-  <ion-button type="submit" expand="block" (click)="submitForm()">Entrar</ion-button>
+  <ion-toolbar>
+    <ion-button type="submit" expand="block" (click)="submitForm()" [disabled]="!loginForm.valid">Entrar</ion-button>
+  </ion-toolbar>
 </ion-footer>

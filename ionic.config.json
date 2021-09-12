@@ -1,5 +1,8 @@
 {
   "name": "ByCodersTec_desafio_mobile",
-  "integrations": {},
+  "integrations": {
+    "cordova": {},
+    "capacitor": {}
+  },
   "type": "angular"
 }

@@ -1,5 +1,5 @@
 ion-content {
-  --background-color: #111111;
+  --background: #111111;
 
   form {
     margin: auto 10vw;
@@ -12,7 +12,8 @@ ion-content {
       border: 3px solid #393741;
       border-radius: 10px;
       font-size: 16px;
-      --highlight-background: transparent !important;
+      --background: #111111;
+      --highlight-background: #111111 !important;
 
       ion-input {
         --color: #ffffff;
@@ -26,21 +27,25 @@ ion-content {
 }
 
 ion-footer {
-  --background-color: #111111;
+  ion-toolbar {
+    --background: #111111;
 
-  ion-button {
-    --background: #71c13c;
-    height: 40px;
-    width: 80vw;
-    margin: auto;
-    margin-bottom: 50px;
+    ion-button {
+      --background: #71c13c;
+      height: 40px;
+      width: 80vw;
+      margin: auto;
+      margin-bottom: 50px;
+    }
   }
 }
 
 .validation-errors {
-  margin: 15px 0;
+  margin: 5px;
+  margin-bottom: 15px;
 
   ion-label {
     color: #f06564;
+    font-size: 12px;
   }
 }
