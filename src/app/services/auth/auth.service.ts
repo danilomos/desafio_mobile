@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { AngularFireAuth } from "@angular/fire/compat/auth";
-import { Router } from '@angular/router';
+import { StoreService } from '../store/store.service';
 
 @Injectable({
   providedIn: 'root'
@@ -9,17 +9,17 @@ export class AuthService {
 
   constructor(
     private fireAuth: AngularFireAuth,
-    private router: Router
+    private storeService: StoreService
   ) {
     this.fireAuth.authState.subscribe(user => {
-      localStorage.setItem('user', JSON.stringify(user));
+      if (user) this.storeService.updateUserData(user.toJSON());
     })
   }
 
-  async signinUser({ email, password }) {
+  async signIn({ email, password }) {
     try {
-      const res = await this.fireAuth.signInWithEmailAndPassword(email, password);
-      return res;
+      const { user } = await this.fireAuth.signInWithEmailAndPassword(email, password);
+      return user.toJSON();
     } catch (err) {
       throw err;
     }
@@ -33,11 +33,6 @@ export class AuthService {
     } catch (err) {
       throw err;
     }
-  }
-
-  get isLoggedIn(): boolean {
-    const user = JSON.parse(localStorage.getItem('user'));
-    return user !== null;
   }
 
 }

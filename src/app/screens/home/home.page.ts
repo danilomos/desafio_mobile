@@ -1,7 +1,6 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { Environment, GoogleMap, GoogleMapOptions, GoogleMaps, GoogleMapsEvent } from '@ionic-native/google-maps';
 import { Geolocation } from '@ionic-native/geolocation/ngx';
-import { Platform, ToastController } from '@ionic/angular';
+import { Platform } from '@ionic/angular';
 import { UtilService } from 'src/app/services/util/util.service';
 
 declare var google: any;
@@ -21,11 +20,11 @@ export class HomePage implements OnInit {
     latitude: -23.5489,
     longitude: -46.6388
   };
+  actualMarker: any = {};
 
   constructor(
     private platform: Platform,
     private geolocation: Geolocation,
-    public googleMaps: GoogleMaps,
     private utilService: UtilService
   ) { }
 
@@ -65,6 +64,8 @@ export class HomePage implements OnInit {
   }
 
   addMarkerToMap(marker) {
+    if (marker.latitude === this.actualMarker.latitude && marker.longitude === this.actualMarker.longitude) return;
+    this.actualMarker = marker;
     let position = new google.maps.LatLng(marker.latitude, marker.longitude);
     if (!this.mapMarker.latitude) this.mapMarker.setMap(null);
     this.mapMarker = new google.maps.Marker({

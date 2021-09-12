@@ -1,8 +1,8 @@
 import { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
-  appId: 'io.ionic.starter',
-  appName: 'ByCodersTec_desafio_mobile',
+  appId: 'danilomos.aondeestou',
+  appName: 'AondeEstou',
   webDir: 'www',
   bundledWebRuntime: false,
   cordova: {

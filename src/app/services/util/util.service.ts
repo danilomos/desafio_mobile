@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ToastController } from '@ionic/angular';
+import { LoadingController, ToastController } from '@ionic/angular';
 
 @Injectable({
   providedIn: 'root'
@@ -7,15 +7,30 @@ import { ToastController } from '@ionic/angular';
 export class UtilService {
 
   constructor(
-    private toastCtrl: ToastController
+    private toastCtrl: ToastController,
+    private loadingCtrl: LoadingController
   ) { }
 
-  async showToast(message: string, duration: number = 2000, position: "middle" | "top" | "bottom" = "top") {
+  async showToast(message: string, duration: number = 5000, position: "middle" | "top" | "bottom" = "top") {
     let toast = await this.toastCtrl.create({
       message,
       duration,
       position
     });
     toast.present();
+  }
+
+  async showLoading() {
+    const loading = await this.loadingCtrl.create({
+      duration: 30000,
+      translucent: true,
+      mode: "ios",
+      spinner: "bubbles"
+    });
+    return await loading.present();
+  }
+
+  hideLoading() {
+    this.loadingCtrl.dismiss();
   }
 }

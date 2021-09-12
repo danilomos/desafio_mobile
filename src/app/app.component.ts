@@ -1,4 +1,6 @@
 import { Component } from '@angular/core';
+import scriptjs from 'scriptjs';
+import config from "../../config";
 
 @Component({
   selector: 'app-root',
@@ -6,5 +8,7 @@ import { Component } from '@angular/core';
   styleUrls: ['app.component.scss'],
 })
 export class AppComponent {
-  constructor() {}
+  constructor() {
+    scriptjs.get(`https://maps.googleapis.com/maps/api/js?key=${config.googleKey}`, () => console.log("Google Maps Script"));
+  }
 }
