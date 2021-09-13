@@ -1,5 +1,6 @@
 <ion-content>
   <form [formGroup]="loginForm" class="login-form">
+    <ion-img src="assets/images/logo.png"></ion-img>
     <ion-item>
       <ion-label position="floating">E-mail</ion-label>
       <ion-input type="email" id="email" formControlName="email" class="form-control"></ion-input>
@@ -18,13 +19,16 @@
 
     <div class="validation-errors">
       <ion-label *ngFor="let validation of validationsMessages.password">
-        <span *ngIf="showError('password', validation.type)" class="validation-error-password">{{ validation.message }}</span>
+        <span *ngIf="showError('password', validation.type)" class="validation-error-password">{{ validation.message
+          }}</span>
       </ion-label>
     </div>
   </form>
 </ion-content>
 <ion-footer>
   <ion-toolbar>
-    <ion-button type="submit" id="submit" expand="block" (click)="submitForm()" [disabled]="!loginForm.valid">Entrar</ion-button>
+    <ion-button type="submit" id="submit" expand="block" (click)="submitForm()" [disabled]="!loginForm.valid">
+      <span>Entrar</span>
+    </ion-button>
   </ion-toolbar>
 </ion-footer>

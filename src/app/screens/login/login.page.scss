@@ -33,9 +33,14 @@ ion-footer {
     ion-button {
       --background: #71c13c;
       height: 40px;
-      width: 80vw;
+      width: 70vw;
       margin: auto;
       margin-bottom: 50px;
+      color: white;
+      --color: white;
+      --color-activated:white;
+      --color-focused: white;
+      --color-hover: white; 
     }
   }
 }
@@ -48,4 +53,10 @@ ion-footer {
     color: #f06564;
     font-size: 12px;
   }
+}
+
+ion-img {
+  margin: 0 auto;
+  margin-bottom: 10vh;
+  height: 90px;
 }
