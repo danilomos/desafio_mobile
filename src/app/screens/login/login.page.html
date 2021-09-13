@@ -1,30 +1,30 @@
 <ion-content>
-  <form [formGroup]="loginForm">
+  <form [formGroup]="loginForm" class="login-form">
     <ion-item>
       <ion-label position="floating">E-mail</ion-label>
-      <ion-input type="email" formControlName="email" class="form-control"></ion-input>
+      <ion-input type="email" id="email" formControlName="email" class="form-control"></ion-input>
     </ion-item>
 
     <div class="validation-errors">
       <ion-label *ngFor="let validation of validationsMessages.email">
-        <span *ngIf="showError('email', validation.type)">{{ validation.message }}</span>
+        <span *ngIf="showError('email', validation.type)" class="validation-error-email">{{ validation.message }}</span>
       </ion-label>
     </div>
 
     <ion-item>
       <ion-label position="floating">Senha</ion-label>
-      <ion-input type="password" formControlName="password" class="form-control"></ion-input>
+      <ion-input type="password" id="password" formControlName="password" class="form-control"></ion-input>
     </ion-item>
 
     <div class="validation-errors">
       <ion-label *ngFor="let validation of validationsMessages.password">
-        <span *ngIf="showError('password', validation.type)">{{ validation.message }}</span>
+        <span *ngIf="showError('password', validation.type)" class="validation-error-password">{{ validation.message }}</span>
       </ion-label>
     </div>
   </form>
 </ion-content>
 <ion-footer>
   <ion-toolbar>
-    <ion-button type="submit" expand="block" (click)="submitForm()" [disabled]="!loginForm.valid">Entrar</ion-button>
+    <ion-button type="submit" id="submit" expand="block" (click)="submitForm()" [disabled]="!loginForm.valid">Entrar</ion-button>
   </ion-toolbar>
 </ion-footer>
