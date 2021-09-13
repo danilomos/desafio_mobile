@@ -23,9 +23,4 @@ describe('Home page Testing', () => {
     it('should geolocation permission', () => {
         expect(isPermissionAllowed("geolocation")).to.be.true;
     });
-
-    it('should marker visible', () => {
-        cy.get('#gmimap0')
-            .should('exist')
-    });
 });

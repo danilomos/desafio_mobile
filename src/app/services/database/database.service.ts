@@ -38,7 +38,6 @@ export class DatabaseService {
   async addUserPosition(user) {
     if (!this.storage) return;
     const data = [user.uid, user.latitude, user.longitude];
-    const res = await this.storage.executeSql(`INSERT INTO ${this.tableName} (user_id, latitude, longitude) VALUES (?, ?, ?)`, data);
-    console.log(res);
+    await this.storage.executeSql(`INSERT INTO ${this.tableName} (user_id, latitude, longitude) VALUES (?, ?, ?)`, data);
   }
 }

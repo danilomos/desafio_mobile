@@ -14,5 +14,5 @@ Pré-requisito:
 * Ter o Node, NPM, Ionic e Android Studio instalados.
 
 1. Após a instalação do node_modules com o comando 'npm i', utilize o comando 'npm start' para rodar o aplicativo no browser.
-2. Para rodar os testes, utilize o comando 'npm test'.
+2. Para rodar os testes, utilize o comando 'npm run headless' e logo após 'npm test'.
 3. Para rodar a aplicação pelo celular, utilize o comando 'npm run sync' e logo após 'npm run android', aonde você poderá debugar/buildar a aplicação.

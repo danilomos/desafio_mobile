@@ -8,6 +8,7 @@ import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 import { Geolocation } from '@ionic-native/geolocation/ngx';
 import { FirebaseAnalytics } from '@ionic-native/firebase-analytics/ngx';
+import { LocationAccuracy  } from '@ionic-native/location-accuracy/ngx';
 
 import { AngularFireModule } from '@angular/fire/compat';
 import { AngularFireAuthModule } from '@angular/fire/compat/auth';
@@ -16,6 +17,7 @@ import { AngularFireAnalyticsModule } from '@angular/fire/compat/analytics';
 import { SQLite } from '@ionic-native/sqlite/ngx';
 
 import { environment } from "../environments/environment";
+import { AndroidPermissions } from '@ionic-native/android-permissions/ngx';
 
 @NgModule({
   declarations: [AppComponent],
@@ -36,7 +38,9 @@ import { environment } from "../environments/environment";
     },
     Geolocation,
     FirebaseAnalytics,
-    SQLite
+    SQLite,
+    AndroidPermissions,
+    LocationAccuracy
   ],
   bootstrap: [AppComponent],
 })

@@ -22,7 +22,6 @@ export class AnalyticsService {
         await this.angularFireAnalytics.logEvent(name, params);
       }
     } catch (err) {
-      console.log(err);
       throw err;
     }
 

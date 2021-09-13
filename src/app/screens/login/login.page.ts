@@ -48,11 +48,9 @@ export class LoginPage implements OnInit {
       await this.analyticsService.logEvent("login", { user: user.uid, email: user.email, loginAt: user.lastLoginAt })
       await this.router.navigateByUrl("/home");
     } catch (err) {
-      console.log(err);
       await this.analyticsService.errorEvent(err);
-      this.utilService.showToast("Dados errados ou usuário inexistente.");
-    } finally {
       this.utilService.hideLoading();
+      this.utilService.showToast("Dados errados ou usuário inexistente.");
     }
   }
 

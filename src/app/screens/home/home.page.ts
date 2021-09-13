@@ -1,10 +1,13 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { Geolocation, Geoposition } from '@ionic-native/geolocation/ngx';
+import { AndroidPermissions } from '@ionic-native/android-permissions/ngx';
 import { Platform } from '@ionic/angular';
+
 import { AnalyticsService } from 'src/app/services/analytics/analytics.service';
 import { AuthService } from 'src/app/services/auth/auth.service';
 import { DatabaseService } from 'src/app/services/database/database.service';
 import { UtilService } from 'src/app/services/util/util.service';
+import { LocationAccuracy } from '@ionic-native/location-accuracy/ngx';
 
 declare var google: any;
 
@@ -31,15 +34,14 @@ export class HomePage implements OnInit {
     private utilService: UtilService,
     private analyticsService: AnalyticsService,
     private authService: AuthService,
-    private databaseService: DatabaseService
+    private databaseService: DatabaseService,
+    private androidPermissions: AndroidPermissions,
+    private locationAccuracy: LocationAccuracy
   ) { }
 
   async ngOnInit() {
     await this.platform.ready();
     await this.loadMap();
-    this.user = await this.authService.getUser();
-    const coords = await this.getLocation();
-    await this.analyticsService.logEvent("home", { user: this.user.uid, email: this.user.email, coords: this.formatCoords(coords) })
   }
 
   async loadMap() {
@@ -52,7 +54,10 @@ export class HomePage implements OnInit {
       }
       this.map = new google.maps.Map(this.mapRef.nativeElement, options);
 
-      this.watchGeolocation();
+      await this.checkGPSPermission();
+      this.user = await this.authService.getUser();
+      const coords = await this.getLocation();
+      await this.analyticsService.logEvent("home", { user: this.user.uid, email: this.user.email, coords: this.formatCoords(coords) });
     } catch (err) {
       await this.analyticsService.errorEvent(err);
     }
@@ -62,7 +67,8 @@ export class HomePage implements OnInit {
     this.geolocation.watchPosition().subscribe((data: any) => {
       switch (data.code) {
         case 1:
-          this.utilService.showToast(data.message);
+          this.utilService.hideLoading();
+          this.utilService.genericAlert("Erro", "Por favor, habilite a sua geolocalização para efeturar a operação.");
           break;
         default:
           this.addMarkerToMap(data.coords);
@@ -83,8 +89,8 @@ export class HomePage implements OnInit {
   addMarkerToMap(marker) {
     if (marker.latitude === this.actualMarker.latitude && marker.longitude === this.actualMarker.longitude) return;
     this.actualMarker = marker;
-    let position = new google.maps.LatLng(marker.latitude, marker.longitude);
-    if (!this.mapMarker.latitude) this.mapMarker.setMap(null);
+    const position = new google.maps.LatLng(marker.latitude, marker.longitude);
+    if ("setMap" in this.mapMarker) this.mapMarker.setMap(null);
     this.mapMarker = new google.maps.Marker({
       position,
       animation: google.maps.Animation.DROP,
@@ -96,6 +102,7 @@ export class HomePage implements OnInit {
     this.map.setCenter(position);
 
     this.databaseService.addUserPosition({ ...this.user, ...marker });
+    this.utilService.hideLoading();
   }
 
   formatCoords(coords: Geoposition["coords"]) {
@@ -108,5 +115,41 @@ export class HomePage implements OnInit {
   goToLogin() {
     this.authService.signOut();
   }
+
+  async checkGPSPermission() {
+    try {
+      const result = await this.androidPermissions.checkPermission(this.androidPermissions.PERMISSION.ACCESS_COARSE_LOCATION);
+      if (result.hasPermission) {
+        await this.askToTurnOnGPS();
+      } else {
+        await this.requestGPSPermission();
+      }
+    } catch (err) {
+      this.utilService.hideLoading();
+    }
+  }
+
+  async requestGPSPermission() {
+    const canRequest: boolean = await this.locationAccuracy.canRequest();
+    if (!canRequest) {
+      await this.androidPermissions.requestPermission(this.androidPermissions.PERMISSION.ACCESS_COARSE_LOCATION);
+      this.askToTurnOnGPS();
+    } else {
+      console.log("requestGPSPermission cannotRequest", canRequest);
+    }
+  }
+
+  async askToTurnOnGPS() {
+    try {
+      const res = await this.locationAccuracy.request(this.locationAccuracy.REQUEST_PRIORITY_HIGH_ACCURACY);
+      this.watchGeolocation();
+    } catch (err) {
+      if (err.code !== -1) {
+        this.utilService.hideLoading();
+        this.utilService.genericAlert("Erro", "Por favor, habilite a sua geolocalização para efeturar a operação.");
+      }
+    };
+  }
+
 
 }
