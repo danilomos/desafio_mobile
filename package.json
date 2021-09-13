@@ -12,7 +12,8 @@
     "lint": "ng lint",
     "postinstall": "jetifier",
     "resources": "cordova-res android --skip-config --copy",
-    "sync": "ionic cap sync"
+    "sync": "ionic cap sync",
+    "android": "ionic cap open android"
   },
   "private": true,
   "dependencies": {
